@@ -1,0 +1,168 @@
+\documentclass{article}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{calc}
+\begin{document}
+\tikzset{
+    old inner xsep/.estore in=\oldinnerxsep,
+    old inner ysep/.estore in=\oldinnerysep,
+    double circle/.style 2 args={
+        circle,
+        old inner xsep=\pgfkeysvalueof{/pgf/inner xsep},
+        old inner ysep=\pgfkeysvalueof{/pgf/inner ysep},
+        /pgf/inner xsep=\oldinnerxsep+#1,
+        /pgf/inner ysep=\oldinnerysep+#1,
+        alias=sourcenode,
+        append after command={
+        let     \p1 = (sourcenode.center),
+                \p2 = (sourcenode.east),
+                \n1 = {\x2-\x1-#1-0.5*\pgflinewidth}
+        in
+            node [inner sep=0pt, draw, circle, minimum width=2*\n1,at=(\p1),#2] {}
+        }
+    },
+    double circle/.default={2pt}{black}
+}
+\tikzset{
+	old inner xsep/.estore in=\oldinnerxsep,
+	old inner ysep/.estore in=\oldinnerysep,
+	double circle2/.style 2 args={
+		circle,
+		old inner xsep=\pgfkeysvalueof{/pgf/inner xsep},
+		old inner ysep=\pgfkeysvalueof{/pgf/inner ysep},
+		/pgf/inner xsep=\oldinnerxsep+#1,
+		/pgf/inner ysep=\oldinnerysep+#1,
+		alias=sourcenode,
+		append after command={
+			let     \p1 = (sourcenode.center),
+			\p2 = (sourcenode.east),
+			\n1 = {\x2-\x1-#1-0.5*\pgflinewidth}
+			in
+			node [inner sep=0pt, draw, circle,dashed, minimum width=2*\n1,at=(\p1),#2] {}
+		}
+	},
+	double circle2/.default={2pt}{black}
+}
+
+\begin{tikzpicture}
+\begin{scope}[ hehe/.style={circle,thick,draw=black},foo/.style = {thick,double circle, draw = black}]
+    \node[hehe] (A) at (-1.5,0) {A};
+    \node[hehe] (R) at (1.5,0) {R};
+    \node[foo] (X0) at (-6,-3) {$X_0$};
+    \node[foo] (X1) at (-4,-3) {$X_1$};
+    \node[foo] (Xk1) at (0,-3) {$X_{k-1}$};
+    \node[foo] (Xk) at (2,-3) {$X_k$};
+    \node[foo] (XK) at (6,-3) {$X_K$};
+    \node (a1) at (-2,-3) {$...$};
+    \node (a2) at (4,-3) {$...$};
+    
+\end{scope}
+
+\begin{scope}[>={Stealth[black]},`'
+              every node/.style={fill=white,circle},foo/.style = {thick,double circle, draw = black},
+              every edge/.style={draw=black,thick}]
+
+    \path [->] (A) edge (X1);
+    \path [->] (A) edge (Xk1);
+    \path [->] (A) edge (Xk);
+    \path [->] (A) edge (XK);
+
+    \path [->] (R) edge (X1);
+    \path [->] (R) edge (Xk1);
+    \path [->] (R) edge (Xk);
+    \path [->] (R) edge (XK);
+    \path [->] (X0) edge (X1);
+    \path [->] (X1) edge (a1);
+    \path [->] (a1) edge (Xk1);
+    \path [->] (Xk1) edge (Xk);
+    \path [->] (Xk) edge (a2);
+    \path [->] (a2) edge (XK);
+    
+\end{scope}
+\end{tikzpicture}
+
+\vfill
+\begin{tikzpicture}
+\begin{scope}[ hehe/.style={circle,thick,draw=black},foo/.style = {thick,double circle, draw = black},factor/.style={rectangle,fill=black}]
+	\node[factor] (f1) at (-1.5,1.5) {};
+    \node[hehe] (A) at (-1.5,0) {A};
+    \node[hehe] (R) at (1.5,0) {R};
+    \node[factor] (f2) at (1.5,1.5) {};
+    \node[foo,dashed] (X0) at (-7.5,-3) {$X_0$};
+    \node[factor] (f3) at (-6.25,-3) {};
+    \node[foo,dashed] (X1) at (-5,-3) {$X_1$};
+    \node[foo,dashed] (Xk1) at (-2,-3) {$X_{k-1}$};
+    \node[factor] (f4) at (0,-3) {};
+    \node[foo,dashed] (Xk) at (1.5,-3) {$X_k$};
+    \node[foo,dashed] (XK) at (7,-3) {$X_K$};
+    \node (a1) at (-3.5,-3) {$...$};
+    \node (a2) at (3.80,-3) {$...$};
+    \node[factor] (f5) at (5.25,-3) {};
+    
+\end{scope}
+
+\begin{scope}[>={Stealth[black]},`'
+              every node/.style={fill=white,circle},foo/.style = {dashed,thick,double circle, draw = black},
+              every edge/.style={draw=black,thick}]
+
+    \path [-] (f1) edge (A);
+    \path [-] (f2) edge (R);
+    \path [->] (A) edge (f3);
+    \path [->] (A) edge (f4);
+    \path [->] (A) edge (f5);
+
+    \path [->] (R) edge (f3);
+    \path [->] (R) edge (f4);
+    \path [->] (R) edge (f5);
+    
+    \path [-,dashed] (X0) edge (X1);
+    \path [-,dashed] (X1) edge (a1);
+    \path [-,dashed] (a1) edge (Xk1);
+    \path [-,dashed] (Xk1) edge (Xk);
+    \path [-,dashed] (Xk) edge (a2);
+    \path [-,dashed] (a2) edge (XK);
+    
+\end{scope}
+\end{tikzpicture}
+\newpage
+\begin{tikzpicture}
+	\begin{scope}[ hehe/.style={circle,thick,draw=black},foo/.style = {thick,double circle2, draw = black},factor/.style={rectangle,fill=black}]
+	
+	\node[factor] (f1)[label={f1}] at (-2,1.5) {};
+	\node[hehe] (A) at (-2,0) {A};
+	\node[hehe] (R) at (2,0) {R};
+	\node[factor] (f2)[label={f2}] at (2,1.5) {};
+	\node[foo,dashed] (X0) at (-2,-3) {$X_0$};
+	\node[factor] (f3)[label={f3}] at (0,-3) {};
+	\node[foo,dashed] (X1) at (2,-3) {$X_1$};
+	
+	
+	\end{scope}
+	
+	\begin{scope}[>={Stealth[black]},`'
+	every node/.style={fill=white,circle},foo/.style = {dashed,thick,double circle, draw = black},
+	every edge/.style={draw=black,thick}]
+	
+	\path [-] (f1) edge (A);
+	\path [-] (f2) edge (R);
+	\path [->] (A) edge (f3);
+	
+	\path [->] (R) edge (f3);
+	
+
+	\path [-,dashed] (X0) edge (X1);
+
+	
+	\end{scope}
+\end{tikzpicture}
+\end{document}
+    \path [->] (A) edge node {$5$} (B);
+    \path [->] (B) edge node {$3$} (C);
+    \path [->] (A) edge node {$4$} (D);
+    \path [->] (D) edge node {$3$} (C);
+    \path [->] (A) edge node {$3$} (E);
+    \path [->] (D) edge node {$3$} (E);
+    \path [->] (D) edge node {$3$} (F);
+    \path [->] (C) edge node {$5$} (F);
+    \path [->] (E) edge node {$8$} (F); 
+    \path [->] (B) edge[bend right=60] node {$1$} (E); 
