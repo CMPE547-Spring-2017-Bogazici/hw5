@@ -1,4 +1,8 @@
 # hw5
+
+You may find the html:
+https://rawgit.com/busebuz/hw5/master/hw5.html
+
 Variational Bayes and EM
 
 Deadline: 31 May
